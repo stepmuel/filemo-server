@@ -2,10 +2,11 @@
   "name": "Filemo Server",
   "description": "A proxy server used by the iOS Filemo app to access Arq backups.",
   "repository": "https://github.com/stepmuel/filemo-server",
-  "scripts": {
-    "postdeploy": "mv config.heroku.php config.php"
-  },
   "env": {
+    "CONFIG_PATH": {
+      "description": "Use costum configuration.",
+      "value": "config.heroku.php"
+    },
     "ACCESS_TOKEN": {
       "description": "A secret key to limit access to the server.",
       "generator": "secret"
