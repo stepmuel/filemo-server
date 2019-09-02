@@ -2,9 +2,14 @@
 
 This repo contains the the proxy server used by the iOS Filemo app to access Arq backups.
 
-To create a server, copy the files `index.php` and `store.php` to a folder served to the web. Alternatively, you can host the server directly on your machine using `php -S 0.0.0.0:8080 .`.
+To create a server, copy the files in this repo to a folder served to the web. Alternatively, you can host the server directly on your machine using `php -S 0.0.0.0:8080 .`.
 
 You also need to create `config.php`, according to the instructions in `config.template.php`.
+
+Currently, there are two different providers available:
+
+* `fs` requires that the backup folder created by Arq is available over the file system. This is usually the case when using SFTP to backup to your own server, and running the Filemo proxy there as well.
+* `s3` works with S3 object storage servers as provided by AWS or Wasabi. It is recommended to create a separate read only user for Filemo.
 
 If you have questions, suggestions, or want an invite to the iOS beta, please contact me at `stephan (at) heap.ch`, or on [via Twitter](https://twitter.com/stepmuel).
 
@@ -12,7 +17,7 @@ If you have questions, suggestions, or want an invite to the iOS beta, please co
 
 ### What data does the Filemo Server expose?
 
-All data requires the access token. The following data is available unencrypted:
+All access requires a secret access token. The following data is available unencrypted:
 
 * The Arq assigned uuid of all computers contained in the backup.
 * The `computerinfo` files for all computers, containing computer name and user name.
@@ -33,18 +38,18 @@ The [Arq data format](https://www.arqbackup.com/arq_data_format.txt) combines sm
 
 **Split Files**
 
-Large files can be split into multiple parts, stored in separate encrypted files. The iOS FileProvider extension technology used by Filemo is designed to download a file with a single request, and working around this has many drawbacks. For example, files can't be downloaded in the background, which requires a lot more memory and the UI doesn't show a progress indicator.
+Large files can be split into multiple parts, stored in separate encrypted files. The iOS FileProvider extension technology used by Filemo is designed to download a file with a single request, and working around this has drawbacks, like incorrect download progress indicators.
 
 **Limited Data Access**
 
-The server can limit access to exactly the data listed in the previous section. Other data on the file system stays hidden. No data can be manipulated or deleted. This can be a benefit compared to for example giving the app access to the server via ssh.
+The server can limit access to exactly the data listed in the previous section. Other data on the file system stays hidden. No data can be manipulated or deleted. This can be a benefit compared to for example giving the app access to the server via ssh or S3 access keys.
 
 **Extensibility**
 
-In the future, the server can be extended to not only serve local files, but also provide access to backups stored in AWS, Backblaze, etc.
+In the future, the server can be extended to provide access to additional backups destinations like Dropbox or Backblaze. Since the server is open source, anyone can add their own provider.
 
 ### How does caching work?
 
-When creating a backup, all new files are put into the same packset until it is full. There is therefore a high chance that many files will be in the same packset when browsing a backup. The caching mechanism remembers the last time it found a file in a packset, and will check the most recent first.
+When creating a backup, new small files are put into the same packset until it is full. This leads to a high probability that files will be in the same packset when browsing a backup. The caching mechanism remembers the last time it found a file in a packset, and will check the most recent first.
 
-Caching has to be enabled by providing a cache file path in `config.php`. Since packfiles are separated by its path, the same cache file can be used for multiple Filemo instances on the same machine.
+When using s3, the cache will keep the whole packset index for even faster browsing.
