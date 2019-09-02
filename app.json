@@ -1,0 +1,30 @@
+{
+  "name": "Filemo Server",
+  "description": "A proxy server used by the iOS Filemo app to access Arq backups.",
+  "repository": "https://github.com/stepmuel/filemo-server",
+  "scripts": {
+    "postdeploy": "mv config.heroku.php config.php"
+  },
+  "env": {
+    "ACCESS_TOKEN": {
+      "description": "A secret key to limit access to the server.",
+      "generator": "secret"
+    },
+    "S3_URL": {
+      "description": "S3 server url.",
+      "value": "https://s3.eu-central-1.wasabisys.com/todo/"
+    },
+    "S3_REGION": {
+      "description": "S3 server region.",
+      "value": "us-east-1"
+    },
+    "S3_KEY_ID": {
+      "description": "S3 access key ID.",
+      "value": "todo"
+    },
+    "S3_SECRET": {
+      "description": "S3 access key secret.",
+      "value": "todo"
+    }
+  }
+}
