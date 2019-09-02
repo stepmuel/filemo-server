@@ -22,13 +22,17 @@ set_exception_handler(function($e) {
 function conf($key, $def = null) {
   static $conf = null;
   if ($conf === null) {
-    $load = function() {
-      include('config.php');
-      return get_defined_vars();
-    };
-    $conf = file_exists('config.php') ? $load() : [];
+    $path = isset($_SERVER['CONFIG_PATH']) ? $_SERVER['CONFIG_PATH'] : 'config.php';
+    $conf = loadVars($path);
   }
   return isset($conf[$key]) ? $conf[$key] : $def;
+}
+
+function loadVars($_path) {
+  if (!file_exists($_path)) return [];
+  include($_path);
+  unset($_path);
+  return get_defined_vars();
 }
 
 if (conf('fspath') !== null) {
