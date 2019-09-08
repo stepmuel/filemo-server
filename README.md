@@ -17,6 +17,14 @@ A proxy server to access your S3 backups can be deployed on Heroku for free:
 
 If you have questions, suggestions, or want an invite to the iOS beta, please contact me at `stephan (at) heap.ch`, or on [via Twitter](https://twitter.com/stepmuel).
 
+## S3 Configuration Notes
+
+* The S3 url has to end with a slash (`/`).
+  * Use `http://{bucket}.s3-{region}.amazonaws.com/` for AWS.
+  * Use `https://s3.{region}.wasabisys.com/{bucket}/` for Wasabi.
+* For wasabi, always use `us-east-1` as region (not in the url, but in the separate field).
+* When using Heroku, the access token is randomly generated and can be accessed under `Settings > Config Vars`.
+
 ## Q&A
 
 ### What data does the Filemo Server expose?
