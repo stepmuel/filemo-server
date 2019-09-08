@@ -14,7 +14,14 @@ $accesstoken = conf('accesstoken');
 if ($accesstoken === null) throw new Exception("Missing access token configuration", 500);
 if ($accesstoken !== false && getAuthToken() !== $accesstoken) throw new Exception("Invalid access token", 401);
 
-$get = isset($_GET['get']) ? $_GET['get'] : null;
+$get = isset($_GET['get']) ? $_GET['get'] : 'status';
+
+if ($get === 'status') {
+  test();
+  $info = ['status' => 'OK'];
+  sendJSON($info);
+  exit;
+}
 
 if ($get === 'computers') {
   serveComputers();
