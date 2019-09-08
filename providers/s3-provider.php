@@ -49,6 +49,14 @@ function serveKeys($computerID) {
   echo file_get_contents($url);
 }
 
+function test() {
+  $server = conf('s3server');
+  $ids = computerIDs($server);
+  if (count($ids) === 0) throw new Exception("No backups found at", 500);
+  $domain = cacheDomain('dbtest', true);
+  if ($domain === null) throw new Exception("Unable to write to database", 500);
+}
+
 // Private functions
 
 function computerIDs($server) {

@@ -1,22 +1,18 @@
 <?php
 
+require_once('common.php');
+
 set_error_handler(function($severity , $message, $file, $line) {
   throw new ErrorException($message, 0, $severity, $file, $line);
 });
 
 set_exception_handler(function($e) {
-  //echo $e, "\n"; // TODO: Only if DEBUG
   $code = $e->getCode();
-  if (!headers_sent()) {
-    http_response_code($code ? $code : 500);
-    header('Content-Type: application/json');
-  }
   $info = ['message' => $e->getMessage()];
-  if ($code === 500) {
-    $info['file'] = $e->getFile();
-    $info['line'] = $e->getLine();
+  sendJSON($info, $code ? $code : 500);
+  if (defined('DEBUG') && DEBUG) {
+    echo $e, "\n";
   }
-  echo json_encode($info), "\n";
 });
 
 function conf($key, $def = null) {
@@ -40,5 +36,5 @@ if (conf('fspath') !== null) {
 } elseif (conf('s3server') !== null) {
   require_once('providers/s3-provider.php');
 } else {
-  throw new Exception("Missing provider configuration");
+  throw new Exception("No provider configured");
 }

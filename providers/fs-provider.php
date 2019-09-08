@@ -45,6 +45,14 @@ function serveKeys($computerID) {
   readfile("{$base}/{$computerID}/encryptionv3.dat");
 }
 
+function test() {
+  $base = conf('fspath');
+  $ids = computerIDs($base);
+  if (count($ids) === 0) throw new Exception("No backups found at '{$base}'", 500);
+  $domain = cacheDomain('dbtest', true);
+  if ($domain === null) throw new Exception("Unable to write to database", 500);
+}
+
 // Private functions
 
 function computerIDs($base) {

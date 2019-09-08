@@ -11,6 +11,10 @@ Currently, there are two different providers available:
 * `fs` requires that the backup folder created by Arq is available over the file system. This is usually the case when using SFTP to backup to your own server, and running the Filemo proxy there as well.
 * `s3` works with S3 object storage servers as provided by AWS or Wasabi. It is recommended to create a separate read only user for Filemo.
 
+A proxy server to access your S3 backups can be deployed on Heroku for free:
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/stepmuel/filemo-server/tree/heroku)
+
 If you have questions, suggestions, or want an invite to the iOS beta, please contact me at `stephan (at) heap.ch`, or on [via Twitter](https://twitter.com/stepmuel).
 
 ## Q&A
