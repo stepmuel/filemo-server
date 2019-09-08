@@ -4,7 +4,7 @@
   "repository": "https://github.com/stepmuel/filemo-server",
   "env": {
     "CONFIG_PATH": {
-      "description": "Use costum configuration.",
+      "description": "Use costum configuration. (Leave unchanged!)",
       "value": "config.heroku.php"
     },
     "ACCESS_TOKEN": {
@@ -12,20 +12,16 @@
       "generator": "secret"
     },
     "S3_URL": {
-      "description": "S3 server url.",
-      "value": "https://s3.eu-central-1.wasabisys.com/todo/"
+      "description": "S3 server url."
     },
     "S3_REGION": {
-      "description": "S3 server region.",
-      "value": "us-east-1"
+      "description": "S3 server region."
     },
     "S3_KEY_ID": {
-      "description": "S3 access key ID.",
-      "value": "todo"
+      "description": "S3 access key ID."
     },
     "S3_SECRET": {
-      "description": "S3 access key secret.",
-      "value": "todo"
+      "description": "S3 access key secret."
     }
   }
 }
