@@ -5,17 +5,15 @@ set_error_handler(function($severity , $message, $file, $line) {
 });
 
 set_exception_handler(function($e) {
-  //echo $e, "\n"; // TODO: Only if DEBUG
+  if (defined('DEBUG') && DEBUG) {
+    echo $e, "\n";
+  }
   $code = $e->getCode();
   if (!headers_sent()) {
     http_response_code($code ? $code : 500);
     header('Content-Type: application/json');
   }
   $info = ['message' => $e->getMessage()];
-  if ($code === 500) {
-    $info['file'] = $e->getFile();
-    $info['line'] = $e->getLine();
-  }
   echo json_encode($info), "\n";
 });
 
