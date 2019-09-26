@@ -1,17 +1,17 @@
 # Filemo Server
 
-This repo contains the the proxy server used by the iOS Filemo app to access Arq backups.
+This repo contains the Filemo server component used by the iOS [Filemo app](https://filemo.heap.ch) to access [Arq backups](https://www.arqbackup.com).
 
-To create a server, copy the files in this repo to a folder served to the web. Alternatively, you can host the server directly on your machine using `php -S 0.0.0.0:8080 .`.
+To create a Filemo server, copy the files in this repo to a folder served to the web. Alternatively, you can host the server directly on your machine using `php -S 0.0.0.0:8080 .`.
 
 You also need to create `config.php`, according to the instructions in `config.template.php`.
 
 Currently, there are two different providers available:
 
-* `fs` requires that the backup folder created by Arq is available over the file system. This is usually the case when using SFTP to backup to your own server, and running the Filemo proxy there as well.
+* `fs` requires that the backup folder created by Arq is available over the file system. This is usually the case when using SFTP to backup to your own server, and running the Filemo server component there as well.
 * `s3` works with S3 object storage servers as provided by AWS or Wasabi. It is recommended to create a separate read only user for Filemo.
 
-A proxy server to access your S3 backups can be deployed on Heroku for free:
+A Filemo server to access your S3 backups can be deployed on Heroku for free:
 
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/stepmuel/filemo-server/tree/heroku)
 
@@ -24,10 +24,11 @@ If you have questions, suggestions, or want an invite to the iOS beta, please co
   * Use `https://s3.{region}.wasabisys.com/{bucket}/` for Wasabi.
 * For wasabi, always use `us-east-1` as region (not in the url, but in the separate field).
 * When using Heroku, the access token is randomly generated and can be accessed under `Settings > Config Vars`.
+* When changing config vars on Heroku, the app has to be restarted for the changes to take effect.
 
 ## Q&A
 
-### What data does the Filemo Server expose?
+### What data does the Filemo server expose?
 
 All access requires a secret access token. The following data is available unencrypted:
 
@@ -40,7 +41,7 @@ All other data is encrypted and requires the backup password to decode:
 * *Folder Configuration Files*, which contain additional information about the backup, like the name of the folder.
 * All files contained in the backups, current and past, and when backups were made (commits).
 
-The server can not provide more restrictive access to the encrypted files, because the encryption makes it impossible for it to know what it is serving.
+The Filemo server can not provide more restrictive access to the encrypted files, because the encryption makes it impossible for it to know what it is serving.
 
 ### Why is a server needed?
 
@@ -54,14 +55,16 @@ Large files can be split into multiple parts, stored in separate encrypted files
 
 **Limited Data Access**
 
-The server can limit access to exactly the data listed in the previous section. Other data on the file system stays hidden. No data can be manipulated or deleted. This can be a benefit compared to for example giving the app access to the server via ssh or S3 access keys.
+The Filemo server can limit access to exactly the data listed in the previous section. Other data on the file system stays hidden. No data can be manipulated or deleted. This can be a benefit compared to for example giving the app access to the server via ssh or S3 access keys.
 
 **Extensibility**
 
-In the future, the server can be extended to provide access to additional backups destinations like Dropbox or Backblaze. Since the server is open source, anyone can add their own provider.
+In the future, the Filemo server can be extended to provide access to additional backups destinations like Dropbox or Backblaze. Since the server is open source, anyone can add their own provider.
 
 ### How does caching work?
 
 When creating a backup, new small files are put into the same packset until it is full. This leads to a high probability that files will be in the same packset when browsing a backup. The caching mechanism remembers the last time it found a file in a packset, and will check the most recent first.
 
 When using s3, the cache will keep the whole packset index for even faster browsing.
+
+To purge the cache, simply delete the caching database file (`/tmp/filemo.cache.sqlite` unless configured otherwise). The "Purge Cache" button in the Filemo app does not affect the Filemo server cache.
