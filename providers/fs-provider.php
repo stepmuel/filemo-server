@@ -60,6 +60,7 @@ function computerIDs($base) {
   foreach (glob("{$base}/*", GLOB_ONLYDIR | GLOB_NOSORT) as $path) {
     $uuid = basename($path);
     if (validUUID($uuid, false) === null) continue;
+    if (!file_exists("{$base}/{$uuid}/encryptionv3.dat")) continue;
     $out []= $uuid;
   }
   return $out;
