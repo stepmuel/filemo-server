@@ -80,15 +80,15 @@ function objectPointer($computerID, $bucketID, $hash, $isTree) {
   $hash_bin = hex2bin($hash);
   if (!$isTree) {
     // Search object files
-		$pre = bin2hex($hash_bin{0});
-		$hash_hex = bin2hex(substr($hash_bin, 1));
-		$objPath = "{$base}/{$computerID}/objects/{$pre}/{$hash_hex}";
-		if (file_exists($objPath)) {
+    $pre = bin2hex($hash_bin{0});
+    $hash_hex = bin2hex(substr($hash_bin, 1));
+    $objPath = "{$base}/{$computerID}/objects/{$pre}/{$hash_hex}";
+    if (file_exists($objPath)) {
       return [
         'url' => $objPath,
         'length' => filesize($objPath),
       ];
-		}
+    }
   }
   // Search packsets
   $typeSuffix = $isTree ? 'trees' : 'blobs';
@@ -154,15 +154,15 @@ function packFind($base, $domain, $key, $hash) {
 
 function fetchIndexes($base, $key, $cached, $cbk) {
   $info = null;
-	$dir = new DirectoryIterator("{$base}/{$key}");
-	foreach ($dir as $file) {
-		if ($file->getExtension() !== 'index') continue;
+  $dir = new DirectoryIterator("{$base}/{$key}");
+  foreach ($dir as $file) {
+    if ($file->getExtension() !== 'index') continue;
     $pack = basename($file->getFilename(), '.index');
     if (isset($cached[$pack])) continue;
-		$path = $file->getPathname();
+    $path = $file->getPathname();
     $bin = file_get_contents($path);
     $info = $cbk($bin, $pack);
     if ($info !== null) break;
-	}
+  }
   return $info;
 }

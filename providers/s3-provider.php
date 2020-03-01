@@ -99,7 +99,7 @@ function objectPointer($computerID, $bucketID, $hash, $isTree) {
   $hash_bin = hex2bin($hash);
   if (!$isTree) {
     // Search object files
-		$objKey = "{$computerID}/objects/" . bin2hex($hash_bin);
+    $objKey = "{$computerID}/objects/" . bin2hex($hash_bin);
     $size = getFileSize($server, $objKey);
     if ($size !== null) {
       return [

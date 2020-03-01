@@ -49,7 +49,7 @@ function cacheTouch($domain, $sha1) {
 
 function cacheSelect($domain) {
   $db = cacheGetDB();
-	$stmt = $db->prepare("SELECT sha1, content FROM pack_index WHERE domain = ? ORDER BY ts DESC");
-	$stmt->execute([$domain]);
+  $stmt = $db->prepare("SELECT sha1, content FROM pack_index WHERE domain = ? ORDER BY ts DESC");
+  $stmt->execute([$domain]);
   return $stmt;
 }
